@@ -4236,7 +4236,7 @@ void Spell::WriteSpellGoTargets(WorldPacket& data)
             // possibly SPELL_MISS_IMMUNE2 for this??
             if (IsChanneledSpell(m_spellInfo) && ihit.targetGUID == m_targets.getUnitTargetGuid()) // can happen due to DR
             {
-                m_duration = 0;                              // cancel aura to avoid visual effect continue
+                m_duration = 0;       // cancel aura to avoid visual effect continue
                 ihit.effectDuration = 0;
             }
             ihit.missCondition = SPELL_MISS_IMMUNE2;
@@ -4255,10 +4255,19 @@ void Spell::WriteSpellGoTargets(WorldPacket& data)
         {
             if (IsChanneledSpell(m_spellInfo) && (ihit.missCondition == SPELL_MISS_RESIST || ihit.missCondition == SPELL_MISS_REFLECT))
             {
-                m_duration = 0;                              // cancel aura to avoid visual effect continue
-                ihit.effectDuration = 0;
+                
+                if (IsPersistentAuraEffect(*m_spellInfo->Effect))
+                {
+                    //
+                }
+                else
+                {
+                    m_duration = 0;                              // cancel aura to avoid visual effect continue
+                    ihit.effectDuration = 0;
+                    ++miss;
+                }
             }
-            ++miss;
+            
         }
     }
 
