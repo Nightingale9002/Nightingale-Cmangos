@@ -43,6 +43,10 @@ bool CheckPathToTarget(Unit* pet, Unit* target)
 
     float collisionHeight = pet->GetCollisionHeight();
     auto& path = pathFinder.getPath();
+
+    if (!pet->IsWithinLOS(x, y, z + target->GetCollisionHeight()))
+        return false;
+
     for (size_t i = 1; i < path.size(); ++i)
     {
         const G3D::Vector3& dataPrevious = path.at(i - 1);
